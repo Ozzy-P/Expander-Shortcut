@@ -1,4 +1,7 @@
-// Obviously doesn't work, yet
+/* 
+    Part 1 Done
+    Part 2 - Auto copy to clipboard and hopefully don't set everything on fire in the process..
+*/
 
 #include <stdio.h>
 #include <time.h>
