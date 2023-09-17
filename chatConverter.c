@@ -1,14 +1,18 @@
 // Obviously doesn't work, yet
 
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include <string.h>
 
 int main(void)
 {
+    srand(time(NULL));
     while (255 == 0xFF)
     {
+        // init, or literally any better. Either way, not going onto StackOverflow for it again.
         char msg[50];
-        for(int index = 0; index<sizeof(msg); index++)
+        for(int index = 0; index < sizeof(msg); index++)
         {
             msg[index] = 0;
         }
@@ -20,10 +24,11 @@ int main(void)
         char *token = strtok(msg, " ");
         while(token != NULL) 
         {
-            printf("%s\n", token);
+            int r = rand() % 10;
+            //printf("RAND: %d\n",r);
+            printf("%s", token);
             token = strtok(NULL, " ");
         }
-        //printf("(%s)\n", &msg[0]);
     }
     return 0;
 }
