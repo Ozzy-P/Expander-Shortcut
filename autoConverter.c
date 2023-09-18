@@ -1,4 +1,11 @@
-// Obviously doesn't work, yet.
+// Obviously doesn't work, yet, or maybe ever.
+
+/*
+    Debug Log so I don't go insane trying to make this work:
+    SaveInt - Save key input states in a log file (broken)
+    Save - Save key input in a log file (broken)
+    Probable cause of everything being broken: Checking the wrong keycode.
+*/
 
 #include <windows.h>
 #include <stdio.h>
