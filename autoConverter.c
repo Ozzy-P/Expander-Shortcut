@@ -1,11 +1,9 @@
 // Obviously doesn't work, yet, or maybe ever.
 
 /*
-    Debug Log so I don't go insane trying to make this work:
-    SaveInt - Save key input states in a log file (broken)
-    Save - Save key input in a log file (broken)
-    Probable cause of everything being broken: Checking the wrong keycode.
-    Cause: Checking for equality instead of setting an array element..
+    TODO: *Fix capitalization, somehow. Preferrably just capitalize the first letter then [REDACTED].
+          *Add copy and paste functionality from chatConverter.c
+          *Attempt to auto paste (probably not needed, esp if its a mist).
 */
 
 #include <windows.h>
