@@ -35,6 +35,7 @@ void clearArray(struct message *msgToClear){
     for(int i = 0; i < MAX_CHARS*7; i++){
         (msgToClear)->msg[0] = 0;
     }
+    (msgToClear)->hMem = GlobalAlloc(GMEM_MOVEABLE, 7*MAX_CHARS);
     (msgToClear)->currentCharCount = 0;
 }
 
