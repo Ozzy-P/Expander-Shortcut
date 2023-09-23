@@ -4,31 +4,57 @@
 
 const int MAX_CHARS = 50;
 
-void formatToHex(char *targetArray, struct message *msgToCopy, char *hexValues){
+void formatToHex(struct message *msgToCopy, char *hexValues){
+    char tempArray[MAX_CHARS * 7];
+
+    for(int i = 0; i < MAX_CHARS * 7; i++){
+        tempArray[i] = 0;
+    }
+
     char *token = strtok((msgToCopy)->msg, " ");
     while(token != NULL) {
         int r = rand() % 10;
-        strcat(targetArray,"(");
-        strncat(targetArray,hexValues+(r*7),7);
-        strcat(targetArray,"/");   
-        strcat(targetArray,token);   
-        strcat(targetArray,") ");  
+        strcat(tempArray,"(");
+        strncat(tempArray,hexValues+(r*7),7);
+        strcat(tempArray,"/");   
+        strcat(tempArray,token);   
+        strcat(tempArray,") ");  
         token = strtok(NULL, " ");
+    }
+
+    for(int i = 0; i < MAX_CHARS * 7; i++){
+        if(tempArray[i] == '\0'){
+            break;
+        }
+        (msgToCopy)->msg[i] = tempArray[i];
+        (msgToCopy)->currentCharCount++;
     }
 }
 
 void clearArray(struct message *msgToClear){
-    for(int i = 0; i < MAX_CHARS; i++){
+    for(int i = 0; i < MAX_CHARS*7; i++){
         (msgToClear)->msg[0] = 0;
     }
+    (msgToClear)->currentCharCount;
 }
 
-void copyMessage(HGLOBAL hMem, char *msgToCopy, int size){
-    memcpy(GlobalLock(hMem), msgToCopy, size);
-    GlobalUnlock(hMem);
+struct message *createMessage(){
+    struct message *currentMessage = (struct message *) malloc(sizeof(struct message));
+    (currentMessage)->hMem = GlobalAlloc(GMEM_MOVEABLE, 7*MAX_CHARS);
+    (currentMessage)->currentCharCount = 0;
+    char newArray[MAX_CHARS * 7];
+    for(int i = 0; i < MAX_CHARS * 7; i++){
+        newArray[i] = 0;
+    }
+    (currentMessage)->msg = newArray;
+    return currentMessage;
+}
+
+void copyMessage(struct message *msgToCopy){
+    memcpy((msgToCopy)->hMem, (msgToCopy)->msg, (msgToCopy)->currentCharCount);
+    GlobalUnlock((msgToCopy)->hMem);
     OpenClipboard(0);
     EmptyClipboard();
-    SetClipboardData(CF_TEXT, hMem);
+    SetClipboardData(CF_TEXT, (msgToCopy)->hMem);
     CloseClipboard();
-    GlobalFree(hMem);
 }
