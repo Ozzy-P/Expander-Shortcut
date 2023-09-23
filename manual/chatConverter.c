@@ -1,4 +1,5 @@
 /* 
+    Manual chat converter, single file to compile. Use the terminal to insert a message, then it will be returned. Not respecting more than limit.
     Part 1 Done
     Part 2 - Done - Auto copy to clipboard and hopefully don't set everything on fire in the process..
     Part 3 - Set a keybind.
