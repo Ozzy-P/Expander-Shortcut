@@ -20,6 +20,7 @@ char *hex = "#ffe000#ff0000#ffbb1e#5fff1e#8df9ea#8dacf9#5b16b9#b481fa#fa81eb#cd4
 const int activator = VK_OEM_2;
 const int copy = VK_OEM_6;
 const int exitKey = VK_OEM_5;
+//const int cancelKey = VK_OEM_4;
 
 int main(void){
     int keyPressed = 0;
@@ -62,7 +63,27 @@ int Save(int _key, struct message *msgToSave, char *file){
         Sleep(10);
         for (int i = 8; i < 255; i++){
             int keyState = GetAsyncKeyState(i);
-            if((numberChars > MAX_CHARS-2) || ((keyState & 0x8000) && (i == copy))){
+            if(keyState & 0x8000){
+                switch(i) {
+                    case VK_OEM_4:
+                    case VK_ESCAPE:
+                    case VK_OEM_2:
+                        activeKey = 0;
+                        break;
+                    default:
+                        break;
+                }
+                if(!activeKey){
+                    clearArray(msgToSave);
+                    break;
+                }
+            }
+            if ((numberChars > MAX_CHARS-2)){
+                activeKey = 0; 
+                clearArray(msgToSave);
+                break;
+            }
+            if((keyState & 0x8000) && (i == copy)){
                 activeKey = 0; 
                 (msgToSave)->msg[MAX_CHARS-1] = '\0';
                 fprintf(OUTPUT_FILE, "%s\n", (msgToSave)->msg);
@@ -75,8 +96,13 @@ int Save(int _key, struct message *msgToSave, char *file){
             }
             if (!(keyState) && (pressedChars[i] == 1)){
                 //fprintf(OUTPUT_FILE, "%s", &i);
-                (msgToSave)->msg[numberChars] = i;
-                numberChars++;
+                if((i == VK_BACK) && (numberChars > 0)){
+                    (msgToSave)->msg[numberChars-1] = 0;
+                    numberChars--; 
+                }else if((i != VK_BACK)){
+                    (msgToSave)->msg[numberChars] = i;
+                    numberChars++;
+                }
                 pressedChars[i] = 0;
             }
             if ((keyState & 0x8000) && (pressedChars[i] == 0)){
