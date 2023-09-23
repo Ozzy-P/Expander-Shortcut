@@ -7,7 +7,7 @@ struct message {
     HGLOBAL hMem;
     char msg[50];
 };
-char *formatToHex(char *targetArray, char *messageArray, char *hexValues);
-void copyMessage(HGLOBAL hMem, struct message *msgToCopy, int size);
+void formatToHex(char *targetArray, struct message *msgToCopy, char *hexValues);
+void copyMessage(HGLOBAL hMem, char *msgToCopy, int size);
 void clearArray(struct message *msgToClear);
 #endif
