@@ -4,7 +4,7 @@
     TODO: [W] *Fix capitalization, somehow. Preferrably just capitalize the first letter then [REDACTED].
           [D] *Add copy and paste functionality from chatConverter.c
           [D] *Attempt to auto paste (probably not needed, esp if its a mist).
-          [W] *Remove internet explorer.
+          [D] *Remove internet explorer.
 */
 
 #include <windows.h>
@@ -53,23 +53,18 @@ int Save(int _key, struct message *msgToSave, char *file){
     while ((activeKey == 1)){
         Sleep(10);
         for (int i = 8; i < 255; i++){
-            if((numberChars > MAX_CHARS)){
-                activeKey = 0; 
-                break;
-            }
             int keyState = GetAsyncKeyState(i);
-            if ((keyState & 0x8000) && (i == copy)){
-                activeKey = 0;
-                fprintf(OUTPUT_FILE, "END\n");
-                fclose(OUTPUT_FILE);
-
+            if((numberChars > MAX_CHARS) || ((keyState & 0x8000) && (i == copy))){
+                activeKey = 0; 
+                fprintf(OUTPUT_FILE, "%s\n", (msgToSave)->msg);
                 formatToHex(msgToSave, hex);
+                fprintf(OUTPUT_FILE, "'%s' with size %d\n", (msgToSave)->msg, (msgToSave)->currentCharCount);
+                fclose(OUTPUT_FILE);
                 copyMessage(msgToSave);
                 clearArray(msgToSave);
                 break;
             }
             if (!(keyState) && (pressedChars[i] == 1)){
-                fprintf(OUTPUT_FILE, "%s", &i);
                 (msgToSave)->msg[numberChars] = i;
                 numberChars++;
                 pressedChars[i] = 0;
