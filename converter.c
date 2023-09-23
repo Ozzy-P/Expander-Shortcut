@@ -35,7 +35,7 @@ void clearArray(struct message *msgToClear){
     for(int i = 0; i < MAX_CHARS*7; i++){
         (msgToClear)->msg[0] = 0;
     }
-    (msgToClear)->currentCharCount;
+    (msgToClear)->currentCharCount = 0;
 }
 
 struct message *createMessage(){
@@ -51,7 +51,7 @@ struct message *createMessage(){
 }
 
 void copyMessage(struct message *msgToCopy){
-    memcpy((msgToCopy)->hMem, (msgToCopy)->msg, (msgToCopy)->currentCharCount);
+    memcpy(GlobalLock((msgToCopy)->hMem), (msgToCopy)->msg, (msgToCopy)->currentCharCount);
     GlobalUnlock((msgToCopy)->hMem);
     OpenClipboard(0);
     EmptyClipboard();
