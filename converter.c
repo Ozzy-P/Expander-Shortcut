@@ -10,6 +10,10 @@ void formatToHex(struct message *msgToCopy, char *hexValues){
     for(int i = 0; i < MAX_CHARS * 7; i++){
         tempArray[i] = 0;
     }
+    
+    for(int i = 1; i < (msgToCopy)->msg[i] != '\0'; i++){
+        (msgToCopy)->msg[i] = tolower((msgToCopy)->msg[i]);
+    }
 
     char *token = strtok((msgToCopy)->msg, " ");
     while(token != NULL) {
@@ -33,7 +37,7 @@ void formatToHex(struct message *msgToCopy, char *hexValues){
 
 void clearArray(struct message *msgToClear){
     for(int i = 0; i < MAX_CHARS*7; i++){
-        (msgToClear)->msg[0] = 0;
+        (msgToClear)->msg[i] = 0;
     }
     (msgToClear)->hMem = GlobalAlloc(GMEM_MOVEABLE, 7*MAX_CHARS);
     (msgToClear)->currentCharCount = 0;
