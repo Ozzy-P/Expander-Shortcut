@@ -5,9 +5,11 @@
 extern const int MAX_CHARS;
 struct message {
     HGLOBAL hMem;
-    char msg[50];
+    char *msg;
+    int currentCharCount;
 };
-void formatToHex(char *targetArray, struct message *msgToCopy, char *hexValues);
-void copyMessage(HGLOBAL hMem, char *msgToCopy, int size);
+void formatToHex(struct message *msgToCopy, char *hexValues);
+void copyMessage(struct message *msgToCopy);
 void clearArray(struct message *msgToClear);
+struct message *createMessage();
 #endif
