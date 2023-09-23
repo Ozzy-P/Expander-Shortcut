@@ -13,22 +13,23 @@
 
 int Save(int _key, struct message *msgToSave, char *file);
 char *hex = "#ffe000#ff0000#ffbb1e#5fff1e#8df9ea#8dacf9#5b16b9#b481fa#fa81eb#cd4040";
+const int activator = 0x41;
+const int copy = 0x42;
 
 int main(void){
     int keyPressed = 0;
-    int keyBind = 0x41;
 
-    struct message *currentMessage = (struct message *) malloc(sizeof(struct message));
+    struct message *currentMessage = createMessage();
 
     FreeConsole();
     while (1 == 1){
         Sleep(10);
-        if ((GetAsyncKeyState(keyBind) & 0x8000) && !keyPressed){
+        if ((GetAsyncKeyState(activator) & 0x8000) && !keyPressed){
             keyPressed = 1;
         }
-        else if (!(GetAsyncKeyState(keyBind)) && keyPressed){
+        else if (!(GetAsyncKeyState(activator)) && keyPressed){
             keyPressed = 0;
-            Save(keyBind, currentMessage, "log.txt");
+            Save(activator, currentMessage, "log.txt");
         }
     }
     free(currentMessage);
@@ -37,22 +38,16 @@ int main(void){
 
 int Save(int _key, struct message *msgToSave, char *file){
     Sleep(10);
-    HGLOBAL hMem =  GlobalAlloc(GMEM_MOVEABLE, 7*MAX_CHARS);
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
     fprintf(OUTPUT_FILE, "START\n");
     int activeKey = 1;
     int pressedChars[255+8];
 
-    char allocConvert[MAX_CHARS * 7 + 1];
     int numberChars = 0;
 
     for(int iteration = 0; iteration < 255+8; iteration++){
         pressedChars[iteration] = 0;
-    }
-
-    for(int iteration = 0; iteration < sizeof(allocConvert); iteration++){
-        allocConvert[iteration] = 0;
     }
 
     while ((activeKey == 1)){
@@ -63,13 +58,13 @@ int Save(int _key, struct message *msgToSave, char *file){
                 break;
             }
             int keyState = GetAsyncKeyState(i);
-            if ((keyState & 0x8000) && (i == 0x42)){
+            if ((keyState & 0x8000) && (i == copy)){
                 activeKey = 0;
                 fprintf(OUTPUT_FILE, "END\n");
                 fclose(OUTPUT_FILE);
 
-                formatToHex(allocConvert, msgToSave, hex);
-                copyMessage(hMem,allocConvert, sizeof(allocConvert) / sizeof(allocConvert[0]));
+                formatToHex(msgToSave, hex);
+                copyMessage(msgToSave);
                 clearArray(msgToSave);
                 break;
             }
