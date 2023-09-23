@@ -1,10 +1,14 @@
-// Obviously doesn't work, yet, or maybe ever.
-
 /*
+
+    What is this monster? 
+    Just an ordinary chat color coder for BetterChat v3.
+    Yes, this only has rainbow mode.
+
     TODO: [D] *Fix capitalization, somehow. Preferrably just capitalize the first letter then [REDACTED].
           [D] *Add copy and paste functionality from chatConverter.c
           [D] *Attempt to auto paste (probably not needed, esp if its a mist).
           [D] *Remove internet explorer.
+          [W] *Add keybind to change mode to a static color (toggle console to input change).
 */
 
 #include <windows.h>
