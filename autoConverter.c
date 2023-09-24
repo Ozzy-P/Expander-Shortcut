@@ -20,10 +20,13 @@ char *hex = "#ffe000#ff0000#ffbb1e#5fff1e#8df9ea#8dacf9#5b16b9#b481fa#fa81eb#cd4
 const int activator = VK_OEM_2;
 const int copy = VK_OEM_6;
 const int exitKey = VK_OEM_5;
+const int editSettings = VK_OEM_3;
 //const int cancelKey = VK_OEM_4;
 
 int main(void){
     int keyPressed = 0;
+    int interruptPressed = 0;
+    int mode = 0;
 
     struct message *currentMessage = createMessage();
 
@@ -32,6 +35,19 @@ int main(void){
         Sleep(10);
         if ((GetAsyncKeyState(exitKey) & 0x8000)){
             break;
+        }
+        if ((GetAsyncKeyState(editSettings) & 0x8000) && !interruptPressed){
+            interruptPressed = 1;
+        }
+        else if (!(GetAsyncKeyState(editSettings)) && interruptPressed){
+            interruptPressed = 0;
+            AllocConsole();
+            freopen_s((FILE**)stdout, "CONIN$", "r", stdin);
+            freopen_s((FILE**)stdout, "CONOUT$", "w", stderr);
+            freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+            printf("Enter mode: ");
+            scanf("%d",&mode);
+            FreeConsole();
         }
         if ((GetAsyncKeyState(activator) & 0x8000) && !keyPressed){
             keyPressed = 1;
@@ -112,3 +128,4 @@ int Save(int _key, struct message *msgToSave, char *file){
     }
     return 0;
 }
+
