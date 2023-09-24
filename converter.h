@@ -8,6 +8,7 @@ struct message {
     char *msg;
     int currentCharCount;
 };
+void formatToHexStatic(struct message *msgToCopy, char *hexValues);
 void formatToHex(struct message *msgToCopy, char *hexValues);
 void copyMessage(struct message *msgToCopy);
 void clearArray(struct message *msgToClear);
