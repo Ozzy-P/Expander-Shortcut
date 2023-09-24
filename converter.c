@@ -4,6 +4,32 @@
 
 const int MAX_CHARS = 50;
 
+void formatToHexStatic(struct message *msgToCopy, char *hexValues){
+    char tempArray[MAX_CHARS * 7];
+
+    for(int i = 0; i < MAX_CHARS * 7; i++){
+        tempArray[i] = 0;
+    }
+    
+    for(int i = 1; i < (msgToCopy)->msg[i] != '\0'; i++){
+        (msgToCopy)->msg[i] = tolower((msgToCopy)->msg[i]);
+    }
+    int r = rand() % 10;
+    strcat(tempArray,"(");
+    strncat(tempArray,hexValues+(r*7),7);
+    strcat(tempArray,"/");   
+    strcat(tempArray,(msgToCopy)->msg);   
+    strcat(tempArray,") ");  
+
+    for(int i = 0; i < MAX_CHARS * 7; i++){
+        if(tempArray[i] == '\0'){
+            break;
+        }
+        (msgToCopy)->msg[i] = tempArray[i];
+        (msgToCopy)->currentCharCount++;
+    }
+}
+
 void formatToHex(struct message *msgToCopy, char *hexValues){
     char tempArray[MAX_CHARS * 7];
 
