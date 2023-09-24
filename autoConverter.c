@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "converter.h"
 
-int Save(int _key, struct message *msgToSave, char *file);
+int Save(int _key, struct message *msgToSave, char *file, int textMode);
 char *hex = "#ffe000#ff0000#ffbb1e#5fff1e#8df9ea#8dacf9#5b16b9#b481fa#fa81eb#cd4040";
 const int activator = VK_OEM_2;
 const int copy = VK_OEM_6;
@@ -45,8 +45,10 @@ int main(void){
             freopen_s((FILE**)stdout, "CONIN$", "r", stdin);
             freopen_s((FILE**)stdout, "CONOUT$", "w", stderr);
             freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-            printf("Enter mode: ");
+            printf("Enter mode:");
             scanf("%d",&mode);
+            printf("%d",mode);
+            //fclose((FILE*)stdout);
             FreeConsole();
         }
         if ((GetAsyncKeyState(activator) & 0x8000) && !keyPressed){
@@ -54,14 +56,14 @@ int main(void){
         }
         else if (!(GetAsyncKeyState(activator)) && keyPressed){
             keyPressed = 0;
-            Save(activator, currentMessage, "log.txt");
+            Save(activator, currentMessage, "log.txt", mode);
         }
     }
     free(currentMessage);
     return 0;
 }
 
-int Save(int _key, struct message *msgToSave, char *file){
+int Save(int _key, struct message *msgToSave, char *file, int textMode){
     Sleep(10);
     FILE *OUTPUT_FILE;
     OUTPUT_FILE = fopen(file, "a+");
@@ -103,7 +105,11 @@ int Save(int _key, struct message *msgToSave, char *file){
                 activeKey = 0; 
                 (msgToSave)->msg[MAX_CHARS-1] = '\0';
                 fprintf(OUTPUT_FILE, "%s\n", (msgToSave)->msg);
-                formatToHex(msgToSave, hex);
+                if(!textMode){
+                    formatToHexStatic(msgToSave,hex);
+                }else{
+                    formatToHex(msgToSave, hex);
+                }
                 fprintf(OUTPUT_FILE, "'%s' with size %d\n", (msgToSave)->msg, (msgToSave)->currentCharCount);
                 fclose(OUTPUT_FILE);
                 copyMessage(msgToSave);
@@ -128,4 +134,3 @@ int Save(int _key, struct message *msgToSave, char *file){
     }
     return 0;
 }
-
