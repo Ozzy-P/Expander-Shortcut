@@ -8,7 +8,9 @@
           [D] *Attempt to auto paste (probably not needed, esp if its a mist).
           [D] *Remove internet explorer.
           [D] *Add keybind to change mode to a static color (toggle console to input change).
-          [W] Fix copy and paste invalid characters.
+          [W] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
+          [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
+          [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
 */
 
 #include <windows.h>
