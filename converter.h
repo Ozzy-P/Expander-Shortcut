@@ -12,5 +12,6 @@ void formatToHexStatic(struct message *msgToCopy, char *hexValues);
 void formatToHex(struct message *msgToCopy, char *hexValues);
 void copyMessage(struct message *msgToCopy);
 void clearArray(struct message *msgToClear);
+void saveToFile(int msgSize, char *msg[msgSize], char *file);
 struct message *createMessage();
 #endif
