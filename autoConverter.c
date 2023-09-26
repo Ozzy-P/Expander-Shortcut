@@ -11,6 +11,7 @@
           [W] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
           [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
           [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
+          [W] Shift logging to converter file, also figure out how to send an array of arrays without a static size.
 */
 
 #include <windows.h>
