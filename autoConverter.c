@@ -67,7 +67,7 @@ int main(void){
 }
 
 int Save(int _key, struct message *msgToSave, char *file, int textMode){
-    saveToFile(1, (char *[1]){(char []){"LOG START"}}, file);
+    saveToFile(1, (char *[1]){"LOG START"}, file);
     int activeKey = 1;
     int pressedChars[255+8];
 
