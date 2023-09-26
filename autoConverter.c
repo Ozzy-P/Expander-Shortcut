@@ -11,7 +11,7 @@
           [W] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
           [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
           [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
-          [W] Shift logging to converter file, also figure out how to send an array of arrays without a static size.
+          [D] Shift logging to converter file, also figure out how to send an array of arrays without a static size.
 */
 
 #include <windows.h>
@@ -67,10 +67,7 @@ int main(void){
 }
 
 int Save(int _key, struct message *msgToSave, char *file, int textMode){
-    Sleep(10);
-    FILE *OUTPUT_FILE;
-    OUTPUT_FILE = fopen(file, "a+");
-    fprintf(OUTPUT_FILE, "START\n");
+    saveToFile(1, (char *[1]){(char []){"LOG START"}}, file);
     int activeKey = 1;
     int pressedChars[255+8];
 
@@ -107,20 +104,17 @@ int Save(int _key, struct message *msgToSave, char *file, int textMode){
             if((keyState & 0x8000) && (i == copy)){
                 activeKey = 0; 
                 (msgToSave)->msg[MAX_CHARS-1] = '\0';
-                fprintf(OUTPUT_FILE, "%s\n", (msgToSave)->msg);
                 if(!textMode){
                     formatToHexStatic(msgToSave,hex);
                 }else{
                     formatToHex(msgToSave, hex);
                 }
-                fprintf(OUTPUT_FILE, "'%s' with size %d\n", (msgToSave)->msg, (msgToSave)->currentCharCount);
-                fclose(OUTPUT_FILE);
+                saveToFile(2, (char *[2]){(msgToSave)->msg," was entered."}, file);
                 copyMessage(msgToSave);
                 clearArray(msgToSave);
                 break;
             }
             if (!(keyState) && (pressedChars[i] == 1)){
-                //fprintf(OUTPUT_FILE, "%s", &i);
                 if((i == VK_BACK) && (numberChars > 0)){
                     (msgToSave)->msg[numberChars-1] = 0;
                     numberChars--; 
