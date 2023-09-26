@@ -89,3 +89,16 @@ void copyMessage(struct message *msgToCopy){
     SetClipboardData(CF_TEXT, (msgToCopy)->hMem);
     CloseClipboard();
 }
+
+void saveToFile(int msgSize, char *msg[msgSize], char *file){
+    FILE *OUTPUT_FILE = fopen(file, "a+");
+    for(int i = 0; i < msgSize; i++){
+        int x = 0;
+        while(msg[i][x] != '\0'){
+            fprintf(OUTPUT_FILE,"%c",msg[i][x]);
+            x++;
+        }
+    }
+    fprintf(OUTPUT_FILE, "\n");
+    fclose(OUTPUT_FILE);
+}
