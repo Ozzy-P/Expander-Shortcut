@@ -10,6 +10,7 @@
           [D] *Add keybind to change mode to a static color (toggle console to input change).
           [W] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
           [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
+          * Side note: May become too messy having it directly near a main method. [NC]
           [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
           [D] Shift logging to converter file, also figure out how to send an array of arrays without a static size.
 */
