@@ -8,7 +8,8 @@
           [D] *Attempt to auto paste (probably not needed, esp if its a mist).
           [D] *Remove internet explorer.
           [D] *Add keybind to change mode to a static color (toggle console to input change).
-          [W] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
+          [D] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
+          [W] Add support for shift -> special keys [!@#$%^&*().,], caps lock.
           [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
           * Side note: May become too messy having it directly near a main method. [NC]
           [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
@@ -20,6 +21,7 @@
 #include "converter.h"
 
 int Save(int _key, struct message *msgToSave, char *file, int textMode);
+int isAlphabeticalKey(int key);
 char *hex = "#ffe000#ff0000#ffbb1e#5fff1e#8df9ea#8dacf9#5b16b9#b481fa#fa81eb#cd4040";
 const int activator = VK_OEM_2;
 const int copy = VK_OEM_6;
@@ -119,7 +121,7 @@ int Save(int _key, struct message *msgToSave, char *file, int textMode){
                 if((i == VK_BACK) && (numberChars > 0)){
                     (msgToSave)->msg[numberChars-1] = 0;
                     numberChars--; 
-                }else if((i != VK_BACK)){
+                }else if((i != VK_BACK) && isAlphabeticalKey(i)){
                     (msgToSave)->msg[numberChars] = i;
                     numberChars++;
                 }
@@ -131,4 +133,8 @@ int Save(int _key, struct message *msgToSave, char *file, int textMode){
         }
     }
     return 0;
+}
+
+int isAlphabeticalKey(int key){
+    return (key >= 0x30 && key <= 0x39) || (key >= 0x41 && key <= 0x5A) || key == VK_SPACE;
 }
