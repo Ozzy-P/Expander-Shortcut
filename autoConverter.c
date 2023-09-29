@@ -9,8 +9,8 @@
           [D] *Remove internet explorer.
           [D] *Add keybind to change mode to a static color (toggle console to input change).
           [D] Fix write operation from copying and pasting invalid characters based on input (literally any non-alphabetic character).
-          [W] Add support for shift -> special keys [!@#$%^&*().,], caps lock.
-          [W?] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
+          [W] Add support for shift -> special keys [!@#$%^&*().,], caps lock. And obvs, special keys.
+          [D] Shift capitalization to this file (e.g. handle a shift key in succession with a letter [maybe even caps lock]).
           * Side note: May become too messy having it directly near a main method. [NC]
           [W] Fix copy and paste operation leaving remnants from old operations (possibly still reading from alloc'd garbage addresses?).
           [D] Shift logging to converter file, also figure out how to send an array of arrays without a static size.
@@ -122,13 +122,19 @@ int Save(int _key, struct message *msgToSave, char *file, int textMode){
                     (msgToSave)->msg[numberChars-1] = 0;
                     numberChars--; 
                 }else if((i != VK_BACK) && isAlphabeticalKey(i)){
-                    (msgToSave)->msg[numberChars] = i;
+                    (msgToSave)->msg[numberChars] = ((msgToSave)->shiftActive) ? i : tolower(i);
                     numberChars++;
                 }
                 pressedChars[i] = 0;
+                if(i == VK_SHIFT){
+                    (msgToSave)->shiftActive = 0;
+                }
             }
             if ((keyState & 0x8000) && (pressedChars[i] == 0)){
                 pressedChars[i] = 1;
+                if(i == VK_SHIFT){
+                    (msgToSave)->shiftActive = 1;
+                }
             }
         }
     }
