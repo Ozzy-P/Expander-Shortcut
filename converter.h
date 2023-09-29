@@ -7,6 +7,7 @@ struct message {
     HGLOBAL hMem;
     char *msg;
     int currentCharCount;
+    int shiftActive;
 };
 void formatToHexStatic(struct message *msgToCopy, char *hexValues);
 void formatToHex(struct message *msgToCopy, char *hexValues);
