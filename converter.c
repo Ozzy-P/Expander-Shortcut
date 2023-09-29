@@ -11,9 +11,6 @@ void formatToHexStatic(struct message *msgToCopy, char *hexValues){
         tempArray[i] = 0;
     }
     
-    for(int i = 1; i < (msgToCopy)->msg[i] != '\0'; i++){
-        (msgToCopy)->msg[i] = tolower((msgToCopy)->msg[i]);
-    }
     int r = rand() % 10;
     strcat(tempArray,"(");
     strncat(tempArray,hexValues+(r*7),7);
@@ -37,10 +34,6 @@ void formatToHex(struct message *msgToCopy, char *hexValues){
         tempArray[i] = 0;
     }
     
-    for(int i = 1; i < (msgToCopy)->msg[i] != '\0'; i++){
-        (msgToCopy)->msg[i] = tolower((msgToCopy)->msg[i]);
-    }
-
     char *token = strtok((msgToCopy)->msg, " ");
     while(token != NULL) {
         int r = rand() % 10;
